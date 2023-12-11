@@ -3,7 +3,6 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/chat.css' />
-    <script src="/socket.io/socket.io.js" defer></script>
     <script src="/javascripts/chat.js" defer></script>
   </head>
   <body>
@@ -12,5 +11,23 @@
         <input id="input">
         <button>Send</button>
     </form>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.2/socket.io.js"></script>
+    <script>
+    const socket = io();
+
+    document.querySelector('form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      socket.emit('chat message', document.getElementById('m').value);
+      document.getElementById('m').value = '';
+      return false;
+    });
+
+    socket.on('chat message', function(msg) {
+      const ul = document.getElementById('messages');
+      const li = document.createElement('li');
+      li.appendChild(document.createTextNode(msg));
+      ul.appendChild(li);
+    });
+  </script>
   </body>
 </html>

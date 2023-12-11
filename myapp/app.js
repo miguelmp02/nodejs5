@@ -7,17 +7,20 @@ const session = require('express-session');
 const http = require('http');
 const socketIO = require('socket.io');
 
+const app = express();
+const chatHistory = [];
+const server = http.createServer(app);
+const io = socketIO(server);
+app.locals.title = "Demo Login";
+
 const indexRouter = require('./routes/index');
 const loginRouter = require('./routes/login');
 const restrictedRouter = require('./routes/restricted');
 
-const app = express();
-app.locals.title = "Demo Login";
+
+
 
 // Socket.IO setup
-const chatHistory = [];
-const server = http.createServer(app);
-const io = socketIO(server);
 
 // Middleware for session
 const sessionMiddleware = session({
@@ -77,10 +80,10 @@ io.on('connection', (socket) => {
   socket.emit('chat history', chatHistory);
 
   // Manejar evento de chat
-  socket.on('chat', (data) => {
-      console.log('Mensaje recibido:', data);
-      chatHistory.push(data);
-      io.emit('chat', data);
+  socket.on('chat', (msg) => {
+      console.log('Mensaje recibido:', msg);
+      chatHistory.push(msg);
+      io.emit('chat', msg);
   });
 
   // Manejar desconexión de usuario

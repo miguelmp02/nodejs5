@@ -5,9 +5,9 @@ const messages = document.getElementById("messages");
 
 // Obtén el historial de chat desde el servidor al cargar la página
 socket.on("chat history", (history) => {
-  history.forEach((data) => {
+  history.forEach((msg) => {
     const item = document.createElement("li");
-    item.textContent = `${data.user}: ${data.message}`;
+    item.textContent = `${msg.user}: ${msg.message}`;
     messages.appendChild(item);
   });
   window.scrollTo(0, document.body.scrollHeight);
@@ -35,9 +35,9 @@ form.addEventListener('submit', function (e) {
   }
 });
 
-socket.on("chat", (data) => {
+socket.on("chat", (msg) => {
   const item = document.createElement("li");
-  item.textContent = `${data.user}: ${data.message}`;
+  item.textContent = `${msg.user}: ${msg.message}`;
   messages.appendChild(item);
   window.scrollTo(0, document.body.scrollHeight);
 });
